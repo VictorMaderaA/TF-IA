@@ -1,9 +1,10 @@
+import cv2
 from keras import models
 from keras import layers
+from keras.models import model_from_json
 
 globals()['NET_MODEL'] = "network_model.json"
 globals()['NET_WEIGHTS'] = "network_weights.h5"
-
 
 def build_network():
     network = models.Sequential()
@@ -42,3 +43,32 @@ def store_network(network):
     network.save_weights(globals()['NET_WEIGHTS'])
     print("Modelo Guardado")
 
+
+# Cargamos la red
+def load_network(file_path):
+    print("Cargando modelo")
+    file = open(file_path, "r")
+    network_json = file.read()
+    file.close()
+    print("Modelo Cargado")
+    return model_from_json(network_json)
+
+
+# Cargamos pesos en el modelo
+def load_weights(model, file_path):
+    print("Cargando pesos")
+    model.load_weights(file_path)
+    print("Pesos Cargados")
+    return model
+
+
+def get_saved_network():
+    _network = load_network(globals()['NET_MODEL'])
+    _network = load_weights(_network, globals()['NET_WEIGHTS'])
+    return _network
+
+
+def predict(network, img):
+    img = cv2.resize(img, (150,150))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return network.predict(img)
