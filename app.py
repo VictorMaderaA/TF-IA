@@ -24,12 +24,16 @@ def show_image(image):
     cv2.imshow("App", image)
 
 
+i = 0
+
 while 1:
     img = get_camera_frame()
-    faces_location = get_faces(img)
-    img = draw_rectangle(faces_location, img)
-    faces_img = get_img_faces(img, faces_location)
+    if i == 0:
+        faces_location = get_faces(img)
+        faces_img = get_img_faces(img, faces_location)
 
+    i += 1
+    img = draw_rectangle(faces_location, img)
     for k, img_face in enumerate(faces_img):
         _ = process_img(img_face)
         _ = predict(model, _)
@@ -40,7 +44,9 @@ while 1:
         img = write_text(faces_location[k][0], faces_location[k][1], img, face)
 
     show_image(img)
-    sleep(0.5)
+    if i > 15:
+        i = 0
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
