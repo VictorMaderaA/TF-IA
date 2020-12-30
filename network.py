@@ -72,6 +72,6 @@ def get_saved_network():
 
 def predict(network, img):
     prediction = network.predict(img)[0]
-    print("Prediction")
-    print(prediction)
+    # print("Prediction")
+    # print(prediction)
     return prediction
