@@ -1,8 +1,6 @@
-import cv2
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from PIL import ImageFile
-from tensorflow_core.python import confusion_matrix
 
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
@@ -12,10 +10,10 @@ import matplotlib.pyplot as plt
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-
 folder = "resources"
 train_path = "resources/train"
 test_path = "resources/test"
+
 
 # Mostramos Metricas de una historia
 def show_metrics(history):
@@ -34,6 +32,7 @@ def show_metrics(history):
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
+
 
 # Cargamos Data
 def load_data():
@@ -56,14 +55,14 @@ def load_data():
     print("Test Gen")
     print(testing_generator.class_indices)
 
-    return train_generator,testing_generator
+    return train_generator, testing_generator
 
 
-#Construimos y entrenamos la red
+# Construimos y entrenamos la red
 def train():
     network = build_network()
 
-    train_data,test_data = load_data()
+    train_data, test_data = load_data()
     # Ajustamos el modelo utilizando un generador:
     history = network.fit_generator(
         train_data,
@@ -76,6 +75,7 @@ def train():
     show_metrics(history)
 
     predict(network)
+
 
 # Predecimos sobre una red
 def predict(network):
@@ -90,7 +90,6 @@ def predict(network):
     print()
     print("**********REPORTE DE CLASIFICACION**********")
     print(classification_report(y_test, predicted_classes))
-
 
 
 load_data()

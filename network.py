@@ -2,9 +2,11 @@ import cv2
 from keras import models
 from keras import layers
 from keras.models import model_from_json
+import numpy as np
 
 globals()['NET_MODEL'] = "network_model.json"
 globals()['NET_WEIGHTS'] = "network_weights.h5"
+
 
 def build_network():
     network = models.Sequential()
@@ -29,8 +31,8 @@ def build_network():
     network.summary()
 
     network.compile(optimizer="rmsprop",
-                  loss='categorical_crossentropy',
-                  metrics=['accuracy'])
+                    loss='categorical_crossentropy',
+                    metrics=['accuracy'])
 
     return network
 
@@ -69,6 +71,7 @@ def get_saved_network():
 
 
 def predict(network, img):
-    img = cv2.resize(img, (150,150))
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    return network.predict(img)
+    prediction = network.predict(img)[0]
+    print("Prediction")
+    print(prediction)
+    return prediction

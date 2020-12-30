@@ -1,6 +1,5 @@
-import cv2
 from face_network import get_faces, get_img_faces
-from image_processor import draw_rectangle, write_text
+from image_processor import draw_rectangle, process_img, write_text
 from network import *
 
 captureDevice = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # captureDevice = camera
@@ -21,13 +20,10 @@ while 1:
     img = draw_rectangle(faces_location, img)
     faces_img = get_img_faces(img, faces_location)
 
-    for img_face in faces_img:
-        predict(model, img_face)
-
-    # for k, (x, y, w, h) in enumerate(faces_location):
-    #
-    #
-    #     img = write_text(x, y, img, str(k))
+    for k, img_face in enumerate(faces_img):
+        _ = process_img(img_face)
+        _ = predict(model, _)
+        img = write_text(faces_location[k][0], faces_location[k][1], img, str(_))
 
     show_image(img)
     if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -10,7 +10,7 @@ def get_faces(colored_img):
     faces = classifier.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
 
     for key, (x, y, w, h) in enumerate(faces):
-        exp = int(w * 0.50)
+        exp = int(w * 0.70)
         hexp = int(exp / 2)
         faces[key] = (x - hexp, y - hexp, w + exp, h + exp)
     return faces
