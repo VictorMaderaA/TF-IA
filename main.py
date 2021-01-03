@@ -47,12 +47,12 @@ def load_data():
 
     train_generator = train_datagen.flow_from_directory(
         train_path,
-        target_size=(150, 150),
+        target_size=(32, 32),
         color_mode="grayscale", )
 
     testing_generator = test_datagen.flow_from_directory(
         test_path,
-        target_size=(150, 150),
+        target_size=(32, 32),
         color_mode="grayscale")
 
     print("Train Gen")
@@ -71,9 +71,9 @@ def train():
     # Ajustamos el modelo utilizando un generador:
     history = network.fit_generator(
         train_data,
-        epochs=5,
+        epochs=100,
         validation_data=test_data,
-        steps_per_epoch=125)
+        steps_per_epoch=75)
 
     store_network(network)
 

@@ -2,39 +2,49 @@ import cv2
 from keras import models
 from keras import layers
 from keras.models import model_from_json
+from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten
+
 import numpy as np
 
 globals()['NET_MODEL'] = "network_model.json"
 globals()['NET_WEIGHTS'] = "network_weights.h5"
 
-
 def build_network():
-    network = models.Sequential()
+    model = models.Sequential()
 
     # Capa entrada
-    network.add(layers.Conv2D(10, (5, 5), activation='relu', input_shape=(150, 150, 1)))
-    network.add(layers.MaxPooling2D((2, 2)))
-    network.add(layers.Conv2D(20, (5, 5), activation='relu'))
-    network.add(layers.MaxPooling2D((2, 2)))
-    network.add(layers.Conv2D(10, (5, 5), activation='relu'))
-    network.add(layers.MaxPooling2D((2, 2)))
+    model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=(32, 32, 1)))
+    model.add(Conv2D(32, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-    # Hacemos un flatten para poder usar una red fully connected
-    network.add(layers.Flatten())
-    network.add(layers.Dense(100, activation='relu'))
-    network.add(layers.Dense(100, activation='relu'))
-    network.add(layers.Dense(100, activation='relu'))
+    model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+
+    model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+
+    model.add(Flatten())
+    model.add(Dense(516, activation='relu'))
+    model.add(Dense(225, activation='relu'))
+    model.add(Dense(175, activation='relu'))
+    model.add(Dropout(0.25))
+
 
     # Añadimos una capa softmax para que podamos clasificar las imágenes
-    network.add(layers.Dense(5, activation='softmax'))
+    model.add(layers.Dense(5, activation='softmax'))
 
-    network.summary()
+    model.summary()
 
-    network.compile(optimizer="rmsprop",
+    model.compile(optimizer="rmsprop",
                     loss='categorical_crossentropy',
                     metrics=['accuracy'])
 
-    return network
+    return model
 
 
 def store_network(network):
