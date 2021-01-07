@@ -1,7 +1,7 @@
 from time import sleep
 
 from face_network import get_faces, get_img_faces
-from image_processor import draw_rectangle, process_img, write_text
+from image_processor import draw_rectangle, process_img, write_text, write_text_desc
 from network import *
 
 captureDevice = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # captureDevice = camera
@@ -12,6 +12,14 @@ switcher = {
     2: "Oval",
     3: "Round",
     4: "Square"
+}
+
+descSwitcher = {
+    0: "\nMont c/marco ovalados \nMont c/marco grandes y cuadrados que no superen el marco natural de tu cara \nMont c/marco de tamaño mediano",
+    1: "\nMont c/marco que sean mas anchos de abajo que arriba \nMont con marco redondeado o con mas angulos \nEvitar Mont c/marco rectangulares, estrechos de alto y en forma de pera",
+    2: "\nMont que cubran tus cejas \nMont que abarquen la parte superior de tu rostro de manera amplia \nMont c/marco cuadrados o redondeados, cualquiera quedara bien",
+    3: "\nMont c/marco rectangulares \nMont c/marco estrechos \nEvitar Mont relativamente pequeñas con cristales redondos.",
+    4: "\nMont c/marco redondeados u ovalados \nEvitar Mont c/marco de angulos muy marcados \nMont modelo aviador o estilo Cat Eye son una buena opción"
 }
 
 
@@ -39,9 +47,12 @@ while 1:
         _ = predict(model, _)
         try:
             face = switcher.get(_.tolist().index(1), "Invalid")
+            desc = descSwitcher.get(_.tolist().index(1), "-")
         except:
             face = "Invalid"
+            desc = "-"
         img = write_text(faces_location[k][0], faces_location[k][1], img, face)
+        img = write_text_desc(k * 60, img, face + "\n" + desc)
 
     show_image(img)
     if i > 15:

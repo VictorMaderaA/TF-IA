@@ -22,6 +22,13 @@ def write_text(x, y, img, text):
         3)  # font stroke
     return img
 
+def write_text_desc(yIn, img, text):
+    y0, dy = yIn + 20, 15
+    for i, line in enumerate(text.split('\n')):
+        y = y0 + i * dy
+        cv2.putText(img, line, (0, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
+    return img
+
 
 def process_img(img):
     # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -46,7 +53,7 @@ def process_img(img):
     # print(img_array.ndim)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = Image.fromarray(img, 'L')
-    img = img.resize((150, 150))
+    img = img.resize((32, 32))
     doc = keras.preprocessing.image.img_to_array(img)  # -> numpy array
     # print(type(doc), doc.shape)
     doc = np.expand_dims(doc, axis=0)
