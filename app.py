@@ -52,7 +52,7 @@ while 1:
             face = "Invalid"
             desc = "-"
         img = write_text(faces_location[k][0], faces_location[k][1], img, face)
-        img = write_text_desc(k * 60, img, face + "\n" + desc)
+        img = write_text_desc(k * 80, img, face + "\n" + desc)
 
     show_image(img)
     if i > 15:

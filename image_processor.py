@@ -26,7 +26,9 @@ def write_text_desc(yIn, img, text):
     y0, dy = yIn + 20, 15
     for i, line in enumerate(text.split('\n')):
         y = y0 + i * dy
-        cv2.putText(img, line, (0, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
+        cv2.putText(img, line, (0, y), 
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, 
+            (0, 0,255,255))
     return img
 
 
